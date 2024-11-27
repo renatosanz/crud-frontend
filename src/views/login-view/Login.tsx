@@ -19,6 +19,13 @@ import "./Login.css";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Eye, EyeClosed } from "lucide-react";
 import { Toggle } from "@radix-ui/react-toggle";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 // esquema de validacion
 const formSchema = z.object({
@@ -64,69 +71,74 @@ export default function Login() {
 
   return (
     <main className="h-screen flex w-screen  ">
-      <div className="80vw w-4/12 flex m-auto rounded-md p-10 gap-4 flex-col">
-        <h1 className="text-3xl font-bold m-auto">Login</h1>
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-4 w-2/3 m-auto"
-          >
-            <FormField
-              control={form.control}
-              name="username"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      type="email"
-                      placeholder="Email"
-                      autoComplete="email"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <div className="flex flex-row gap-2">
+      <Card className="80vw w-1/4 flex m-auto p-5 flex-col">
+        <CardHeader>
+          <CardTitle className="text-3xl font-bold">Login</CardTitle>
+          <CardDescription>Bienvenido</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="flex w-full flex-col gap-4"
+            >
+              <FormField
+                control={form.control}
+                name="username"
+                render={({ field }) => (
+                  <FormItem>
                     <FormControl>
                       <Input
-                        type={showPassword}
-                        autoComplete="password"
-                        placeholder="Contraseña"
+                        type="email"
+                        placeholder="Email"
+                        autoComplete="email"
                         {...field}
                       />
                     </FormControl>
-                    <Toggle
-                      onClick={handlePasswordShow}
-                      aria-label="Toggle password"
-                    >
-                      {showPassword == "password" ? (
-                        <EyeClosed className="h-4 w-4" />
-                      ) : (
-                        <Eye className="h-4 w-4" />
-                      )}
-                    </Toggle>
-                  </div>
-                  <FormMessage />
-                  <FormDescription>
-                    ¿No tiene una cuenta?{" "}
-                    <a href="/register" className="font-bold">
-                      Registrate.
-                    </a>
-                  </FormDescription>
-                </FormItem>
-              )}
-            />
-            <Button type="submit">Acceder</Button>
-          </form>
-        </Form>
-      </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="flex flex-row gap-2">
+                      <FormControl>
+                        <Input
+                          type={showPassword}
+                          autoComplete="password"
+                          placeholder="Contraseña"
+                          {...field}
+                        />
+                      </FormControl>
+                      <Toggle
+                        onClick={handlePasswordShow}
+                        aria-label="Toggle password"
+                      >
+                        {showPassword == "password" ? (
+                          <EyeClosed className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
+                      </Toggle>
+                    </div>
+                    <FormMessage />
+                    <FormDescription>
+                      ¿No tiene una cuenta?{" "}
+                      <a href="/register" className="font-bold">
+                        Registrate.
+                      </a>
+                    </FormDescription>
+                  </FormItem>
+                )}
+              />
+              <Button type="submit">Acceder</Button>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
     </main>
   );
 }

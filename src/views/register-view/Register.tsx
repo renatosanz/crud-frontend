@@ -109,7 +109,7 @@ export default function Register() {
 
   return (
     <main className="h-screen flex w-screen">
-      <div className="80vw w-3/12 flex m-auto rounded-md p-10 flex-col gap-4 ">
+      <div className="80vw w-2/4 flex m-auto rounded-md p-10 flex-col gap-4 ">
         <h1 className=" text-3xl font-bold  m-auto ">Registrar</h1>
         <Form {...form}>
           <form
