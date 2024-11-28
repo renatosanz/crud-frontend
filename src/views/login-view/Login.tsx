@@ -26,10 +26,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { loginUser } from "@/services/user-service";
 
 // esquema de validacion
 const formSchema = z.object({
-  username: z
+  email: z
     .string()
     .min(2, {
       message: "Username must be at least 2 characters.",
@@ -46,18 +47,21 @@ export default function Login() {
   //estado para visualizar el password
   const [showPassword, setShowPassword] = useState("password");
 
-  //
+  // crear un form control
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      email: "",
+      password: "",
     },
   });
 
-  // 2. Define a submit handler.
+  // Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
+    loginUser(values);
+    alert("Usuario Logeado.");
     console.log(values);
   }
 
@@ -84,7 +88,7 @@ export default function Login() {
             >
               <FormField
                 control={form.control}
-                name="username"
+                name="email"
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>

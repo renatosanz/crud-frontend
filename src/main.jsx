@@ -4,7 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import Login from "./views/login-view/Login";
 import Register from "./views/register-view/Register";
-
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 const router = createBrowserRouter([
   { path: "/", element: <Login /> },
@@ -12,7 +12,7 @@ const router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
+  <ThemeProvider theme="dark" storageKey="vite-ui-theme">
     <RouterProvider router={router} />
-  </StrictMode>
+  </ThemeProvider>
 );

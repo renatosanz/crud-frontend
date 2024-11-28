@@ -8,10 +8,10 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
+  FormLabel,
   FormField,
   FormItem,
-  FormLabel,
+  FormDescription,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -87,7 +87,6 @@ export default function Register() {
         password: values.password,
         age: values.age,
         email: values.email,
-        balance: 0,
         country: values.country,
       };
       registerUser(newData);
@@ -121,7 +120,7 @@ export default function Register() {
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormDescription>Ingresa nombre de usuario</FormDescription>
+                  <FormLabel>Ingresa nombre de usuario</FormLabel>
                   <FormControl>
                     <Input type="text" placeholder="nombre" {...field} />
                   </FormControl>
@@ -135,9 +134,9 @@ export default function Register() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormDescription>
+                  <FormLabel>
                     Ingresa tu correo electronico.
-                  </FormDescription>
+                  </FormLabel>
                   <FormControl>
                     <Input
                       type="email"
@@ -156,7 +155,7 @@ export default function Register() {
               name="age"
               render={({ field }) => (
                 <FormItem>
-                  <FormDescription>Ingresa tu edad</FormDescription>
+                  <FormLabel>Ingresa tu edad</FormLabel>
                   <FormControl>
                     <Input
                       className="w-1/3"
@@ -180,7 +179,7 @@ export default function Register() {
               render={({ field }) => {
                 return (
                   <FormItem>
-                    <FormDescription>Pais de origen.</FormDescription>
+                    <FormLabel>Pais de origen.</FormLabel>
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
@@ -602,7 +601,7 @@ export default function Register() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormDescription>Ingresa una contraseña</FormDescription>
+                  <FormLabel>Ingresa una contraseña</FormLabel>
                   <div className="flex flex-row gap-2">
                     <FormControl>
                       <Input
@@ -632,7 +631,7 @@ export default function Register() {
               name="password_validate"
               render={({ field }) => (
                 <FormItem>
-                  <FormDescription>Verifica tu contraseña</FormDescription>
+                  <FormLabel>Verifica tu contraseña</FormLabel>
                   <div className="flex flex-row gap-2">
                     <FormControl>
                       <Input

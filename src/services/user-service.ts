@@ -17,3 +17,20 @@ export async function registerUser(data: any) {
     console.error(error);
   }
 }
+
+export async function loginUser(data: any) {
+  //console.log('data', data)
+  try {
+    const response = await axios
+      .post(`${environment.url_api}/login`, data)
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    console.log(response);
+  } catch (error) {
+    console.error(error);
+  }
+}
