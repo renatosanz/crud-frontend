@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { jwtDecode } from "jwt-decode";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -16,7 +17,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import "./Login.css";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Eye, EyeClosed } from "lucide-react";
 import { Toggle } from "@radix-ui/react-toggle";
 import {
@@ -27,6 +27,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { loginUser } from "@/services/user-service";
+import { useNavigate } from "react-router-dom";
+import useUserStore from "@/services/Store";
 
 // esquema de validacion
 const formSchema = z.object({
@@ -44,8 +46,18 @@ const formSchema = z.object({
 });
 
 export default function Login() {
+  const navigate = useNavigate();
+  const setUser = useUserStore((state) => state.setUser);
   //estado para visualizar el password
   const [showPassword, setShowPassword] = useState("password");
+  // handler para cambiar entre visible y no visible
+  const handlePasswordShow = () => {
+    if (showPassword === "password") {
+      setShowPassword("text");
+    } else {
+      setShowPassword("password");
+    }
+  };
 
   // crear un form control
   const form = useForm<z.infer<typeof formSchema>>({
@@ -57,21 +69,19 @@ export default function Login() {
   });
 
   // Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    loginUser(values);
-    alert("Usuario Logeado.");
-    console.log(values);
-  }
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    //ejecutar el login
+    //console.log(values);
+    let userData = await loginUser(values);
+    if (userData != null) {
+      //alert("Usuario Logeado.");
+      const dataFromToken = jwtDecode(userData.token);
+      setUser(dataFromToken.user);
+      console.log("user_recived: ", userData);
 
-  const handlePasswordShow = () => {
-    if (showPassword === "password") {
-      setShowPassword("text");
-    } else {
-      setShowPassword("password");
+      navigate("/home");
     }
-  };
+  }
 
   return (
     <main className="h-screen flex w-screen  ">
