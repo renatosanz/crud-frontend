@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { jwtDecode } from "jwt-decode";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -28,18 +27,12 @@ import {
 } from "@/components/ui/card";
 import { loginUser } from "@/services/user-service";
 import { useNavigate } from "react-router-dom";
-import useUserStore from "@/services/Store";
 
 // esquema de validacion
 const formSchema = z.object({
-  email: z
-    .string()
-    .min(2, {
-      message: "Username must be at least 2 characters.",
-    })
-    .email({
-      message: "Enter a valid email.",
-    }),
+  email: z.string().email({
+    message: "Enter a valid email.",
+  }),
   password: z.string().min(2, {
     message: "Username must be at least 2 characters.",
   }),
@@ -47,7 +40,6 @@ const formSchema = z.object({
 
 export default function Login() {
   const navigate = useNavigate();
-  const setUser = useUserStore((state) => state.setUser);
   //estado para visualizar el password
   const [showPassword, setShowPassword] = useState("password");
   // handler para cambiar entre visible y no visible
@@ -70,15 +62,7 @@ export default function Login() {
 
   // Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    //ejecutar el login
-    //console.log(values);
-    let userData = await loginUser(values);
-    if (userData != null) {
-      //alert("Usuario Logeado.");
-      const dataFromToken = jwtDecode(userData.token);
-      setUser(dataFromToken.user);
-      console.log("user_recived: ", userData);
-
+    if (await loginUser(values)) {
       navigate("/home");
     }
   }
