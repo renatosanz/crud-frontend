@@ -6,14 +6,24 @@ import Register from "./views/register-view/Register";
 import Home from "./views/home-view/Home";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
-const router = createBrowserRouter([
-  { path: "/", element: <Login /> },
-  { path: "/register", element: <Register /> },
-  { path: "/home", element: <Home /> },
-]);
+const router = createBrowserRouter(
+  [
+    { path: "/", element: <Login /> },
+    { path: "/register", element: <Register /> },
+    { path: "/home", element: <Home /> },
+  ],
+  {
+    future: {
+      v7_startTransition: true,
+      v7_relativeSplatPath: true,
+      v7_fetcherPersist: true,
+      v7_normalizeFormMethod: true,
+      v7_partialHydration: true,
+      v7_skipActionErrorRevalidation: true,
+    },
+  }
+);
 
 createRoot(document.getElementById("root")).render(
-  <ThemeProvider theme="dark" storageKey="vite-ui-theme">
     <RouterProvider router={router} />
-  </ThemeProvider>
 );

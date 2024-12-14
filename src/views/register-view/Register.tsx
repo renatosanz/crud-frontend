@@ -14,33 +14,34 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Toggle } from "@/components/ui/toggle";
-import { Eye, EyeClosed, Route } from "lucide-react";
+import { Eye, EyeClosed } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
-import { registerUser } from "@/services/user-service";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { registerUser, UserSchema } from "@/services/user-service";
+import { Select } from "@/components/ui/select";
 import CountryList from "@/components/CountryList";
 
 // esquema de validacion del formulario
 const formSchema = z.object({
   email: z.string().email({
-    message: "Ingresa un correo valido.",
+    message: "Email not valid.",
   }),
-  username: z.string().min(2, {
-    message: "Ingresa un correo valido.",
+  username: z
+    .string()
+    .min(2, {
+      message: "Username not valid.",
+    })
+    .max(20, { message: "Username too long." }),
+  password: z.string().min(3, {
+    message: "Password too short.",
   }),
-  password: z.string(),
-  password_validate: z.string(),
+  password_validate: z.string().min(2, {
+    message: "Password too short.",
+  }),
   age: z.coerce
     .number()
-    .nonnegative({ message: "Edad invalida." })
-    .min(18, { message: "Debes ser mayor de edad." })
-    .max(99, { message: "Edad invalida." }),
+    .nonnegative({ message: "Age not valid." })
+    .min(18, { message: "You must be 18 or older." })
+    .max(99, { message: "Age not valid." }),
   country: z.string(),
 });
 
@@ -72,14 +73,7 @@ export default function Register() {
   // control form
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      email: "",
-      username: "",
-      password: "",
-      password_validate: "",
-      age: 18,
-      country: "",
-    },
+    defaultValues: UserSchema()
   });
 
   // una vez ya validado todo correctamente se envian los datos a la base de datos

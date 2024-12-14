@@ -63,7 +63,7 @@ export default function Login() {
   // Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (await loginUser(values)) {
-      navigate("/home");
+      navigate("/home", { replace: true });
     }
   }
 
