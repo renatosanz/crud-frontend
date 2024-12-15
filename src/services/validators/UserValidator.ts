@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const formSchema = z
+export const UserValidator = z
   .object({
     email: z.string().email({
       message: "Email not valid.",
@@ -14,13 +14,21 @@ const formSchema = z
     password: z
       .string()
       .min(8, { message: "Password must be at least 8 characters long." })
-      .regex(/[A-Z]/, { message: "Password must contain at least one uppercase letter." })
-      .regex(/[a-z]/, { message: "Password must contain at least one lowercase letter." })
+      .regex(/[A-Z]/, {
+        message: "Password must contain at least one uppercase letter.",
+      })
+      .regex(/[a-z]/, {
+        message: "Password must contain at least one lowercase letter.",
+      })
       .regex(/[0-9]/, { message: "Password must contain at least one number." })
-      .regex(/[^A-Za-z0-9]/, { message: "Password must contain at least one special character." }),
+      .regex(/[^A-Za-z0-9]/, {
+        message: "Password must contain at least one special character.",
+      }),
     password_validate: z
       .string()
-      .min(8, { message: "Password confirmation must be at least 8 characters long." }),
+      .min(8, {
+        message: "Password confirmation must be at least 8 characters long.",
+      }),
     age: z.coerce
       .number()
       .nonnegative({ message: "Age not valid." })
@@ -32,5 +40,3 @@ const formSchema = z
     message: "Passwords do not match.",
     path: ["password_validate"],
   });
-
-export { formSchema };

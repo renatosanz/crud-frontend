@@ -13,6 +13,8 @@ import {
   MenubarSubTrigger,
   MenubarTrigger,
 } from "@/components/ui/menubar";
+import { EditUser } from "./EditUser";
+import { Button } from "@/components/ui/button";
 
 export function HomeMenu() {
   return (
@@ -26,7 +28,9 @@ export function HomeMenu() {
       <MenubarMenu>
         <MenubarTrigger>Perfil</MenubarTrigger>
         <MenubarContent>
-          <MenubarItem>Editar perfil</MenubarItem>
+          <EditUser>
+            <Button className="w-full" variant="ghost">Editar perfil</Button>
+          </EditUser>
         </MenubarContent>
       </MenubarMenu>
     </Menubar>

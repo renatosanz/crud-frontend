@@ -1,22 +1,14 @@
 import React, { useEffect, useState } from "react";
+import Cookies from "js-cookie";
 import { useUserStore } from "@/services/UserStore";
 import { getUserData, logoutUser } from "@/services/user-service";
 import dayjs from "dayjs";
 import { HomeMenu } from "./HomeMenu";
 import { Button } from "@/components/ui/button";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+
 import { LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import LogoutModal from "./LogoutModal";
 
 export default function Home() {
   // navigate para redirigir a la pagina de login
@@ -38,12 +30,18 @@ export default function Home() {
         setIsLogged(true);
       }
     };
-    fetchProtectedData().catch(console.error);
-    set_last_login(new Date());
+    if (Cookies.get("isLogged")) {
+      fetchProtectedData().catch(console.error);
+      set_last_login(new Date());
+    } else {
+      navigate("/", { replace: true });
+    }
   }, []);
 
-  const handleLogout = () => {
-    if (logoutUser(last_login)) {
+  const handleLogout = async() => {
+    let res = await logoutUser(last_login)
+    console.log('logout res: ', res)
+    if (res) {
       navigate("/", { replace: true });
     }
   };
@@ -53,27 +51,11 @@ export default function Home() {
       <div className="m-auto w-9/12 h-5/6 gap-5 flex flex-col p-5 rounded-2xl">
         <nav className="flex flex-row justify-between">
           <HomeMenu />
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button variant="destructive">
-                <LogOut /> Logout
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>¿Deseas cerrar sesión?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  Si cierras sesion tus cookies seras eliminadas para procuras la seguridad.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                <AlertDialogAction onClick={handleLogout}>
-                  Cerrar Sesión
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          <LogoutModal handleLogout={handleLogout}>
+            <Button variant="destructive">
+              <LogOut /> Logout
+            </Button>
+          </LogoutModal>
         </nav>
         <header className="flex flex-row gap-5 bg-zinc-100 rounded-2xl px-5 py-3">
           <div>
@@ -83,7 +65,8 @@ export default function Home() {
               <>
                 {user.last_login != null ? (
                   <h4>
-                    Ultima sesión: {dayjs(user.last_login).format("DD/MM/YYYY hh:mm:ss")}
+                    Ultima sesión:{" "}
+                    {dayjs(user.last_login).format("DD/MM/YYYY hh:mm:ss")}
                   </h4>
                 ) : (
                   <h3>Bienvenido</h3>

@@ -1,5 +1,6 @@
 import { environment } from "../env";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 export function UserSchema() {
   return {
@@ -18,8 +19,13 @@ export async function registerUser(data: any) {
       `${environment.url_api}/user/register`,
       data
     );
-    console.log("Register successful", response.data);
-    return response.data;
+    if (response.data.ok) {
+      console.log("Register successful", response.data);
+      return response.data;
+    } else {
+      console.error("Error on register.");
+      return false;
+    }
   } catch (error) {
     console.error("Error on register.");
     throw error;
@@ -37,6 +43,7 @@ export async function loginUser(data: any) {
     );
 
     if (response.data.ok) {
+      Cookies.set("isLogged", "true");
       return true;
     } else {
       console.error("Not token provided.");
@@ -54,11 +61,34 @@ export async function getUserData() {
       withCredentials: true,
     });
 
-    if (response.data) {
+    if (response.data.ok) {
       console.log("Protected Data OK.");
       return response.data.user_data;
     } else {
       console.error("Error on get protected data.");
+      return false;
+    }
+  } catch (error) {
+    console.error("Error.");
+    return false;
+  }
+}
+
+export async function setUserData(new_data: any) {
+  try {
+    const response = await axios.patch(
+      `${environment.url_api}/user/changedata`,
+      new_data,
+      {
+        withCredentials: true,
+      }
+    );
+
+    if (response.data.ok) {
+      console.log("Data changed OK.");
+      return response.data.user_data;
+    } else {
+      console.error("Error on change data.");
       return false;
     }
   } catch (error) {
@@ -77,7 +107,8 @@ export async function logoutUser(last_login_date: Date) {
       }
     );
 
-    if (response.data) {
+    if (response.data.ok) {
+      Cookies.remove("isLogged");
       console.log("User Logout!!!.");
       return true;
     } else {

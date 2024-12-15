@@ -18,32 +18,11 @@ import { Eye, EyeClosed } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { registerUser, UserSchema } from "@/services/user-service";
 import { Select } from "@/components/ui/select";
-import CountryList from "@/components/CountryList";
+import CountryList from "./CountryList";
+import { UserValidator } from "@/services/validators/UserValidator";
 
 // esquema de validacion del formulario
-const formSchema = z.object({
-  email: z.string().email({
-    message: "Email not valid.",
-  }),
-  username: z
-    .string()
-    .min(2, {
-      message: "Username not valid.",
-    })
-    .max(20, { message: "Username too long." }),
-  password: z.string().min(3, {
-    message: "Password too short.",
-  }),
-  password_validate: z.string().min(2, {
-    message: "Password too short.",
-  }),
-  age: z.coerce
-    .number()
-    .nonnegative({ message: "Age not valid." })
-    .min(18, { message: "You must be 18 or older." })
-    .max(99, { message: "Age not valid." }),
-  country: z.string(),
-});
+const formSchema = UserValidator
 
 export default function Register() {
   // navigate para redirigir a la pagina de login
@@ -87,11 +66,10 @@ export default function Register() {
         country: values.country,
       };
       registerUser(newData);
-      console.log("user registred: ", values);
       navigate("/", { replace: true });
     } else {
       // las contraseñas no coinciden
-      console.log("password dismatch!! ", values);
+      console.log("passwords dismatch!! ", values);
     }
   }
 

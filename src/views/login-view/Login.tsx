@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import Cookies from "js-cookie";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -42,6 +43,13 @@ export default function Login() {
   const navigate = useNavigate();
   //estado para visualizar el password
   const [showPassword, setShowPassword] = useState("password");
+
+  useEffect(() => {
+    if (Cookies.get("isLogged") == "true") {
+      navigate("/home", { replace: true });
+    }
+  }, []);
+
   // handler para cambiar entre visible y no visible
   const handlePasswordShow = () => {
     if (showPassword === "password") {
