@@ -61,7 +61,6 @@ export default function Register() {
       var newData = {
         username: values.username,
         password: values.password,
-        age: values.age,
         email: values.email,
         country: values.country,
       };
@@ -107,29 +106,6 @@ export default function Register() {
                       type="email"
                       placeholder="email"
                       autoComplete="email"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {/* input de edad */}
-            <FormField
-              control={form.control}
-              name="age"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Ingresa tu edad</FormLabel>
-                  <FormControl>
-                    <Input
-                      className="w-1/3"
-                      minLength={2}
-                      maxLength={3}
-                      min={18}
-                      max={99}
-                      type="number"
-                      placeholder="edad"
                       {...field}
                     />
                   </FormControl>

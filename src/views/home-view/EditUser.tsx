@@ -10,13 +10,16 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { deepCopy } from "@/lib/utils";
 import { setUserData } from "@/services/user-service";
 import { useUserStore } from "@/services/UserStore";
+import { useState } from "react";
 import InputMask from "react-input-mask";
 
 export function EditUser({ children }) {
-  let user = useUserStore((state) => state.user);
-  const set_user = useUserStore((state) => state.set_user);
+  const [user, set_user] = useState(
+    deepCopy(useUserStore((state) => state.user))
+  );
 
   const handleUserChanges = async () => {
     const new_user = await setUserData(user);
@@ -30,7 +33,7 @@ export function EditUser({ children }) {
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px]" onCloseAutoFocus={() => {}}>
         <DialogHeader>
           <DialogTitle>Editar Perfil</DialogTitle>
           <DialogDescription>
@@ -47,6 +50,7 @@ export function EditUser({ children }) {
               id="username"
               defaultValue={user.username}
               className="col-span-3"
+              autoComplete="off"
               onChange={(e) => set_user({ ...user, username: e.target.value })}
             />
           </div>
@@ -60,26 +64,6 @@ export function EditUser({ children }) {
               disabled
               className="col-span-3"
             />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="username" className="text-right">
-              Edad
-            </Label>
-            <InputMask
-              mask="99"
-              maskChar=""
-              value={user.age}
-              onChange={(e) => set_user({ ...user, age: e.target.value })}
-            >
-              {(inputProps) => (
-                <Input
-                  {...inputProps}
-                  id="age"
-                  className="col-span-3 w-1/3"
-                  placeholder="Edad"
-                />
-              )}
-            </InputMask>
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name" className="text-right">

@@ -29,11 +29,6 @@ export const UserValidator = z
       .min(8, {
         message: "Password confirmation must be at least 8 characters long.",
       }),
-    age: z.coerce
-      .number()
-      .nonnegative({ message: "Age not valid." })
-      .min(18, { message: "You must be 18 or older." })
-      .max(99, { message: "Age not valid." }),
     country: z.string(),
   })
   .refine((data) => data.password === data.password_validate, {

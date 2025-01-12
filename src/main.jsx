@@ -4,6 +4,7 @@ import "./index.css";
 import Login from "./views/login-view/Login";
 import Register from "./views/register-view/Register";
 import Home from "./views/home-view/Home";
+import UploadRecipes from "./views/files-view/UploadRecipes.tsx";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
 const router = createBrowserRouter(
@@ -11,6 +12,7 @@ const router = createBrowserRouter(
     { path: "/", element: <Login /> },
     { path: "/register", element: <Register /> },
     { path: "/home", element: <Home /> },
+    { path: "/recipes/upload", element: <UploadRecipes /> },
   ],
   {
     future: {
@@ -25,5 +27,5 @@ const router = createBrowserRouter(
 );
 
 createRoot(document.getElementById("root")).render(
-    <RouterProvider router={router} />
+  <RouterProvider router={router} />
 );

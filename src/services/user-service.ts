@@ -4,12 +4,11 @@ import Cookies from "js-cookie";
 
 export function UserSchema() {
   return {
-    email: "",
-    username: "",
-    password: "",
-    password_validate: "",
-    age: 18,
-    country: "",
+    email: undefined,
+    username: undefined,
+    password: undefined,
+    password_validate: undefined,
+    country: undefined,
   };
 }
 
