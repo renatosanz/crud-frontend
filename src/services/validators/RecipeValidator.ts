@@ -10,5 +10,4 @@ export const RecipeValidator = z.object({
     .min(1, { message: "Descripcion requerida" })
     .max(100, { message: "Nota muy extensa!!!" }),
   upload_date: z.date({ message: "Fecha invalida." }),
-  path: z.string().min(1, { message: "Archivo requerido" }),
 });

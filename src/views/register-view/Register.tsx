@@ -20,9 +20,11 @@ import { registerUser, UserSchema } from "@/services/user-service";
 import { Select } from "@/components/ui/select";
 import CountryList from "./CountryList";
 import { UserValidator } from "@/services/validators/UserValidator";
+import { toast } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
 
 // esquema de validacion del formulario
-const formSchema = UserValidator
+const formSchema = UserValidator;
 
 export default function Register() {
   // navigate para redirigir a la pagina de login
@@ -52,165 +54,170 @@ export default function Register() {
   // control form
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: UserSchema()
+    defaultValues: UserSchema(),
   });
 
   // una vez ya validado todo correctamente se envian los datos a la base de datos
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    if (values.password == values.password_validate) {
-      var newData = {
-        username: values.username,
-        password: values.password,
-        email: values.email,
-        country: values.country,
-      };
-      registerUser(newData);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    var newData = {
+      username: values.username,
+      password: values.password,
+      email: values.email,
+      country: values.country,
+    };
+    let res = await registerUser(newData);
+    if (res.ok) {
       navigate("/", { replace: true });
     } else {
       // las contraseñas no coinciden
-      console.log("passwords dismatch!! ", values);
+      toast("Registro fallido", {
+        description: res.error,
+      });
     }
   }
 
   return (
-    <main className="h-screen flex w-screen">
-      <div className="80vw w-2/4 flex m-auto rounded-md p-10 flex-col gap-4 ">
-        <h1 className=" text-3xl font-bold  m-auto ">Registrar</h1>
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-4 w-2/3 m-auto"
-          >
-            <FormField
-              control={form.control}
-              name="username"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Ingresa nombre de usuario</FormLabel>
-                  <FormControl>
-                    <Input type="text" placeholder="nombre" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {/* input de email */}
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Ingresa tu correo electronico.</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="email"
-                      placeholder="email"
-                      autoComplete="email"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {/* input de pais */}
-            <FormField
-              control={form.control}
-              name="country"
-              render={({ field }) => {
-                return (
+    <>
+      <main className="h-screen flex w-screen">
+        <div className="80vw w-2/4 flex m-auto rounded-md p-10 flex-col gap-4 ">
+          <h1 className=" text-3xl font-bold  m-auto ">Registrar</h1>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="space-y-4 w-2/3 m-auto"
+            >
+              <FormField
+                control={form.control}
+                name="username"
+                render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Pais de origen.</FormLabel>
+                    <FormLabel>Ingresa nombre de usuario</FormLabel>
                     <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        {/* lista de paises */}
-                        <CountryList />
-                      </Select>
+                      <Input type="text" placeholder="nombre" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
-                );
-              }}
-            />
-            {/* inputs de contraseña y validacion de contraseña */}
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Ingresa una contraseña</FormLabel>
-                  <div className="flex flex-row gap-2">
+                )}
+              />
+              {/* input de email */}
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Ingresa tu correo electronico.</FormLabel>
                     <FormControl>
                       <Input
-                        type={showPassword01}
-                        autoComplete="password"
-                        placeholder="contraseña"
+                        type="email"
+                        placeholder="email"
+                        autoComplete="email"
                         {...field}
                       />
                     </FormControl>
-                    <Toggle
-                      onClick={handlePasswordShow01}
-                      aria-label="Toggle password"
-                    >
-                      {showPassword01 == "password" ? (
-                        <EyeClosed className="h-4 w-4" />
-                      ) : (
-                        <Eye className="h-4 w-4" />
-                      )}
-                    </Toggle>
-                  </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password_validate"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Verifica tu contraseña</FormLabel>
-                  <div className="flex flex-row gap-2">
-                    <FormControl>
-                      <Input
-                        type={showPassword02}
-                        autoComplete="password"
-                        placeholder="contraseña"
-                        {...field}
-                      />
-                    </FormControl>
-                    <Toggle
-                      onClick={handlePasswordShow02}
-                      aria-label="Toggle password"
-                    >
-                      {showPassword02 == "password" ? (
-                        <EyeClosed className="h-4 w-4" />
-                      ) : (
-                        <Eye className="h-4 w-4" />
-                      )}
-                    </Toggle>
-                  </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              {/* input de pais */}
+              <FormField
+                control={form.control}
+                name="country"
+                render={({ field }) => {
+                  return (
+                    <FormItem>
+                      <FormLabel>Pais de origen.</FormLabel>
+                      <FormControl>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          {/* lista de paises */}
+                          <CountryList />
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
+              />
+              {/* inputs de contraseña y validacion de contraseña */}
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Ingresa una contraseña</FormLabel>
+                    <div className="flex flex-row gap-2">
+                      <FormControl>
+                        <Input
+                          type={showPassword01}
+                          autoComplete="password"
+                          placeholder="contraseña"
+                          {...field}
+                        />
+                      </FormControl>
+                      <Toggle
+                        onClick={handlePasswordShow01}
+                        aria-label="Toggle password"
+                      >
+                        {showPassword01 == "password" ? (
+                          <EyeClosed className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
+                      </Toggle>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password_validate"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Verifica tu contraseña</FormLabel>
+                    <div className="flex flex-row gap-2">
+                      <FormControl>
+                        <Input
+                          type={showPassword02}
+                          autoComplete="password"
+                          placeholder="contraseña"
+                          {...field}
+                        />
+                      </FormControl>
+                      <Toggle
+                        onClick={handlePasswordShow02}
+                        aria-label="Toggle password"
+                      >
+                        {showPassword02 == "password" ? (
+                          <EyeClosed className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
+                      </Toggle>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <div className="flex items-center space-x-2">
-              <Checkbox id="terms" />
-              <label
-                htmlFor="terms"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Acepto los terminos y condiciones.
-              </label>
-            </div>
+              <div className="flex items-center space-x-2">
+                <Checkbox id="terms" />
+                <label
+                  htmlFor="terms"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  Acepto los terminos y condiciones.
+                </label>
+              </div>
 
-            <Button type="submit">Acceder</Button>
-          </form>
-        </Form>
-      </div>
-    </main>
+              <Button type="submit">Acceder</Button>
+            </form>
+          </Form>
+        </div>
+      </main>
+      <Toaster />
+    </>
   );
 }

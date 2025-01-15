@@ -4,11 +4,11 @@ import Cookies from "js-cookie";
 
 export function UserSchema() {
   return {
-    email: undefined,
-    username: undefined,
-    password: undefined,
-    password_validate: undefined,
-    country: undefined,
+    email: "",
+    username: "",
+    password: "",
+    password_validate: "",
+    country: "",
   };
 }
 
@@ -23,10 +23,9 @@ export async function registerUser(data: any) {
       return response.data;
     } else {
       console.error("Error on register.");
-      return false;
+      return response.data;
     }
   } catch (error) {
-    console.error("Error on register.");
     throw error;
   }
 }
