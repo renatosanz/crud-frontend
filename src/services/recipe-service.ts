@@ -5,14 +5,14 @@ export function RecipeSchema() {
   return {
     title: "",
     description: "",
-    upload_date: new Date(),
+    uploaded_at: new Date(),
     path_image: "",
   };
 }
 
 export async function uploadRecipe(data: any) {
   try {
-    console.log('data', data)
+    console.log("data", data);
     const response = await axios.post(
       `${environment.url_api}/recipe/upload`,
       data,
@@ -32,5 +32,24 @@ export async function uploadRecipe(data: any) {
   } catch (error) {
     console.error("Error.");
     throw error;
+  }
+}
+
+export async function getRecipes() {
+  try {
+    const response = await axios.get(`${environment.url_api}/recipe/getUserRecipes`, {
+      withCredentials: true,
+    });
+    
+    if (response.data.ok) {
+      console.log("Recipes recived: ", response.data);
+      return response.data;
+    } else {
+      console.error("Error getting recipes.");
+      return false;
+    }
+  } catch (error) {
+    console.error("Error.");
+    return false;
   }
 }

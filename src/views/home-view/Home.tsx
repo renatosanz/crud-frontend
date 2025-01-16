@@ -7,17 +7,25 @@ import { HomeMenu } from "./HomeMenu";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
-import { LogOut } from "lucide-react";
+import { LogOut, Search } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import LogoutModal from "./LogoutModal";
+import { getRecipes } from "@/services/recipe-service";
+import { RecipeCard } from "./RecipeCard";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 
 export default function Home() {
   // navigate para redirigir a la pagina de login
   const navigate = useNavigate();
+
   // loggin/user control
   const [isLogged, setIsLogged] = useState(false);
   let user = useUserStore((state) => state.user);
   const set_user = useUserStore((state) => state.set_user);
+  const set_recipes = useUserStore((state) => state.set_recipes);
+  const recipes = useUserStore((state) => state.recipes);
+
   // save the current login to send it when a User logout
   const set_last_login = useUserStore((state) => state.set_last_login);
   const last_login = useUserStore((state) => state.last_login);
@@ -26,36 +34,43 @@ export default function Home() {
     const fetchProtectedData = async () => {
       let user = await getUserData();
       if (user) {
-        console.log("user: ", user);
         set_user(user);
+        let res = await getRecipes();
+        console.log("first", res);
+        set_recipes(res.recipes);
         setIsLogged(true);
       }
     };
     if (Cookies.get("isLogged")) {
       fetchProtectedData().catch(console.error);
       set_last_login(new Date());
-      toast("Login exitoso!", {
-        description: dayjs(new Date()).format("DD/MM/YYYY"),
-      });
     } else {
       navigate("/", { replace: true });
     }
   }, []);
 
   const handleLogout = async () => {
-    let res = await logoutUser(last_login);
-    console.log("logout res: ", res);
-    if (res) {
+    if (await logoutUser(last_login)) {
       navigate("/", { replace: true });
     }
   };
 
+  const handleSearch = async () => {
+    //TODO: crear las busquedas
+  };
+
   return (
     <>
-      <main className="h-screen flex w-screen">
-        <div className="m-auto w-6/12 h-5/6 gap-5 flex flex-col p-5 rounded-2xl">
+      <main className="h-screen flex w-screen flex-col">
+        <div className="m-auto w-6/12 py-20 gap-5 flex flex-col p-5 rounded-2xl">
           <nav className="flex flex-row justify-between">
             <HomeMenu />
+            <div className="flex flex-row gap-3">
+              <Input placeholder="Buscar" onChange={handleSearch} />
+              <Button variant="outline">
+                <Search className="m-auto" />
+              </Button>
+            </div>
             <LogoutModal handleLogout={handleLogout}>
               <Button variant="destructive">
                 <LogOut /> Logout
@@ -86,6 +101,21 @@ export default function Home() {
               <h1>{isLogged ? user.recipes_count : -1}</h1>
             </div>
           </header>
+          <section>
+            <h2>Tus Recetas</h2>
+            <div className="grid grid-cols-2 gap-5 ">
+              {recipes.map((e) => (
+                <RecipeCard
+                  title={e.title}
+                  photo={"none"}
+                  id={e.id}
+                  key={e.title}
+                  uploaded_at={e.uploaded_at}
+                  description={e.description}
+                />
+              ))}
+            </div>
+          </section>
         </div>
       </main>
       <Toaster />

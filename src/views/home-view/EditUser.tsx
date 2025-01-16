@@ -23,7 +23,6 @@ export function EditUser({ children }) {
 
   const handleUserChanges = async () => {
     const new_user = await setUserData(user);
-    console.log("new_user", new_user);
     if (new_user) {
       set_user(new_user);
       window.location.reload();

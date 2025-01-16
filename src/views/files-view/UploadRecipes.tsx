@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import React, { useState } from "react";
+import { boolean, z } from "zod";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   Form,
@@ -26,13 +26,44 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
+import { useUserStore } from "@/services/UserStore";
+import { getUserData } from "@/services/user-service";
+import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
+import { ToastAction } from "@/components/ui/toast";
 
 const formSchema = RecipeValidator;
 
 export default function UploadRecipes() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [buttonsDisabled, setButtonsDisabled] = useState<boolean>(false);
+  // Navegación para redirigir a la página de inicio de sesión
+  const navigate = useNavigate();
+  // Control de sesión del usuario
+  const [isLogged, setIsLogged] = useState(false);
+  let user = useUserStore((state) => state.user);
+  const set_user = useUserStore((state) => state.set_user);
+  // Guardar el inicio de sesión actual para usarlo al cerrar sesión
+  const set_last_login = useUserStore((state) => state.set_last_login);
+  const last_login = useUserStore((state) => state.last_login);
 
-  // control form
+  useEffect(() => {
+    const fetchProtectedData = async () => {
+      let user = await getUserData();
+      if (user) {
+        set_user(user);
+        setIsLogged(true);
+      }
+    };
+    if (Cookies.get("isLogged")) {
+      fetchProtectedData().catch(console.error);
+      set_last_login(new Date());
+    } else {
+      navigate("/", { replace: true });
+    }
+  }, []);
+
+  // Control del formulario
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: RecipeSchema(),
@@ -44,19 +75,28 @@ export default function UploadRecipes() {
       return;
     }
 
+    console.log("user", user);
+
     const formData = new FormData();
     formData.append("title", values.title);
     formData.append("description", values.description);
-    formData.append("upload_date", dayjs(values.upload_date).toISOString());
-    formData.append("image", selectedFile); // Añadimos el archivo al FormData
-
-    console.log("formdata", formData);
+    formData.append("uploaded_at", dayjs(values.uploaded_at).toISOString());
+    formData.append("user_id", user.user_id);
+    formData.append("image", selectedFile); // añadir el archivo de img
 
     try {
-      await uploadRecipe(formData);
-      toast.success("Receta publicada!", {
-        description: `Publicación exitosa "${values.title}"`,
-      });
+      let res = await uploadRecipe(formData);
+      if (res.ok) {
+        setButtonsDisabled(true);
+        toast.success("Receta publicada!", {
+          description: `Publicación exitosa "${values.title}"`,
+          duration: 2500,
+          action: <ToastAction altText="Ir a la receta">Ver</ToastAction>,
+          onAutoClose: () => {
+            navigate("/home", { replace: true });
+          },
+        });
+      }
     } catch (error) {
       console.error("Error al subir la receta:", error);
       toast.error("Error al subir la receta.");
@@ -66,8 +106,8 @@ export default function UploadRecipes() {
   function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
-      if (file.size > 5 * 1024 * 1024) {
-        toast.error("El archivo supera los 5 MB permitidos.");
+      if (file.size > 3 * 1024 * 1024) {
+        toast.error("El archivo supera los 3 MB permitidos.");
         return;
       }
       setSelectedFile(file);
@@ -96,12 +136,13 @@ export default function UploadRecipes() {
                   name="title"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Ingresa el titulo de la receta</FormLabel>
+                      <FormLabel>Ingresa el título de la receta</FormLabel>
                       <FormControl>
                         <Input
                           type="text"
-                          placeholder="Titulo"
+                          placeholder="Título"
                           autoComplete="off"
+                          disabled={buttonsDisabled}
                           {...field}
                           max={20}
                           className="w-1/4"
@@ -122,7 +163,7 @@ export default function UploadRecipes() {
                         className="aspect-square flex w-80 h-16 border-dashed border-4 cursor-pointer"
                       >
                         <div className="m-auto flex flex-row gap-2">
-                          <FileUp /> <p>Click para examinar</p>
+                          <FileUp /> <p>Haz clic para examinar</p>
                         </div>
                       </label>
                       <input
@@ -131,6 +172,7 @@ export default function UploadRecipes() {
                         type="file"
                         hidden
                         accept="image/*"
+                        disabled={buttonsDisabled}
                         onChange={handleFileChange}
                       />
                       <Tooltip>
@@ -138,7 +180,7 @@ export default function UploadRecipes() {
                           <FileQuestion className="m-auto ml-5" />
                         </TooltipTrigger>
                         <TooltipContent>
-                          <p>Solo archivos de menos de 5 mb.</p>
+                          <p>Solo archivos de menos de 3 MB.</p>
                         </TooltipContent>
                       </Tooltip>
                       <div>
@@ -147,8 +189,8 @@ export default function UploadRecipes() {
                           style={{
                             marginLeft: "1rem",
                             height: "60px",
-                            width: "60px",
-                            objectFit: "cover",
+                            width: "100px",
+                            objectFit: "contain",
                           }}
                         />
                       </div>
@@ -162,11 +204,12 @@ export default function UploadRecipes() {
                   name="description"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Descripcion del platillo.</FormLabel>
+                      <FormLabel>Descripción del platillo.</FormLabel>
                       <FormControl>
                         <Textarea
                           className="resize-none w-1/3"
                           {...field}
+                          disabled={buttonsDisabled}
                           autoComplete="off"
                         />
                       </FormControl>
@@ -182,9 +225,11 @@ export default function UploadRecipes() {
                 <p>
                   Fecha de subida:
                   {" " +
-                    dayjs(form.getValues().upload_date).format("DD/MM/YYYY")}
+                    dayjs(form.getValues().uploaded_at).format("DD/MM/YYYY")}
                 </p>
-                <Button type="submit">Submit</Button>
+                <Button type="submit" disabled={buttonsDisabled}>
+                  Enviar
+                </Button>
               </form>
             </Form>
           </TooltipProvider>
