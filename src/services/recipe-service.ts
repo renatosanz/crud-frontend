@@ -7,6 +7,7 @@ export function RecipeSchema() {
     description: "",
     uploaded_at: new Date(),
     path_image: "",
+    ingredients: [{ id: crypto.randomUUID(), value: "" }],
   };
 }
 
@@ -37,10 +38,13 @@ export async function uploadRecipe(data: any) {
 
 export async function getRecipes() {
   try {
-    const response = await axios.get(`${environment.url_api}/recipe/getUserRecipes`, {
-      withCredentials: true,
-    });
-    
+    const response = await axios.get(
+      `${environment.url_api}/recipe/getUserRecipes`,
+      {
+        withCredentials: true,
+      }
+    );
+
     if (response.data.ok) {
       console.log("Recipes recived: ", response.data);
       return response.data;

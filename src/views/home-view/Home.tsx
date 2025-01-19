@@ -62,7 +62,7 @@ export default function Home() {
   return (
     <>
       <main className="h-screen flex w-screen flex-col">
-        <div className="m-auto w-6/12 py-20 gap-5 flex flex-col p-5 rounded-2xl">
+        <div className="mx-auto w-6/12 py-20 gap-5 flex flex-col p-5 rounded-2xl">
           <nav className="flex flex-row justify-between">
             <HomeMenu />
             <div className="flex flex-row gap-3">
@@ -77,7 +77,7 @@ export default function Home() {
               </Button>
             </LogoutModal>
           </nav>
-          <header className="flex flex-row gap-5 bg-zinc-100 rounded-2xl px-5 py-3">
+          <header className="justify-between flex flex-row gap-5 bg-zinc-100 rounded-2xl px-5 py-3">
             <div>
               {/* basic user info */}
               <h1>{isLogged ? user.username : "no_user"}</h1>
@@ -104,16 +104,20 @@ export default function Home() {
           <section>
             <h2>Tus Recetas</h2>
             <div className="grid grid-cols-2 gap-5 ">
-              {recipes.map((e) => (
-                <RecipeCard
-                  title={e.title}
-                  photo={"none"}
-                  id={e.id}
-                  key={e.title}
-                  uploaded_at={e.uploaded_at}
-                  description={e.description}
-                />
-              ))}
+              {recipes.length > 0 ? (
+                recipes.map((e: any) => (
+                  <RecipeCard
+                    title={e.title}
+                    photo={"none"}
+                    id={e.id}
+                    key={e.title}
+                    uploaded_at={e.uploaded_at}
+                    description={e.description}
+                  />
+                ))
+              ) : (
+                <h4>Tus recetas publicadas apareceran aqui</h4>
+              )}
             </div>
           </section>
         </div>
