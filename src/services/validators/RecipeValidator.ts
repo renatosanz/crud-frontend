@@ -9,7 +9,7 @@ export const RecipeValidator = z.object({
   description: z
     .string()
     .min(1, { message: "Descripcion requerida" })
-    .max(400, { message: "Nota muy extensa!!!" }),
+    .max(1000, { message: "Nota muy extensa!!!" }),
   uploaded_at: z.date({ message: "Fecha invalida." }),
   ingredients: z
     .array(

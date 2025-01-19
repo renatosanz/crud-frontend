@@ -21,6 +21,7 @@ export default function Home() {
 
   // loggin/user control
   const [isLogged, setIsLogged] = useState(false);
+  const [searchStr, setSearchStr] = useState("");
   let user = useUserStore((state) => state.user);
   const set_user = useUserStore((state) => state.set_user);
   const set_recipes = useUserStore((state) => state.set_recipes);
@@ -57,18 +58,23 @@ export default function Home() {
 
   const handleSearch = async () => {
     //TODO: crear las busquedas
+    navigate(`/search/${searchStr}`);
   };
 
   return (
     <>
       <main className="h-screen flex w-screen flex-col">
         <div className="mx-auto w-6/12 py-20 gap-5 flex flex-col p-5 rounded-2xl">
-          <nav className="flex flex-row justify-between">
+          <nav className="flex flex-row gap-3 justify-between">
             <HomeMenu />
-            <div className="flex flex-row gap-3">
-              <Input placeholder="Buscar" onChange={handleSearch} />
-              <Button variant="outline">
-                <Search className="m-auto" />
+            <div className="flex flex-row w-full gap-3">
+              <Input
+                placeholder="Buscar"
+                id="search_input"
+                onChange={(e) => setSearchStr(e.target.value)}
+              />
+              <Button variant="outline" onClick={handleSearch}>
+                <Search className="m-auto w-full" />
               </Button>
             </div>
             <LogoutModal handleLogout={handleLogout}>
@@ -102,7 +108,7 @@ export default function Home() {
             </div>
           </header>
           <section>
-            <h2>Tus Recetas</h2>
+            <h2 className="px-5 py-3">Tus Recetas</h2>
             <div className="grid grid-cols-2 gap-5 ">
               {recipes.length > 0 ? (
                 recipes.map((e: any) => (

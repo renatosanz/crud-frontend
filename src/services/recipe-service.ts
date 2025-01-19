@@ -57,3 +57,26 @@ export async function getRecipes() {
     return false;
   }
 }
+
+export async function searchRecipes(searchText: string) {
+  try {
+    const response = await axios.post(
+      `${environment.url_api}/recipe/searchRecipes`,
+      { search: searchText },
+      {
+        withCredentials: true,
+      }
+    );
+
+    if (response.data.ok) {
+      console.log("Recipes recived: ", response.data);
+      return response.data.recipes;
+    } else {
+      console.error("Error getting recipes.");
+      return false;
+    }
+  } catch (error) {
+    console.error("Error.");
+    return false;
+  }
+}
