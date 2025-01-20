@@ -80,3 +80,26 @@ export async function searchRecipes(searchText: string) {
     return false;
   }
 }
+
+export async function getSingleRecipe(id: string) {
+  try {
+    const response = await axios.post(
+      `${environment.url_api}/recipe/getRecipe`,
+      { recipe_id: id },
+      {
+        withCredentials: true,
+      }
+    );
+
+    if (response.data.ok) {
+      console.log("Recipe recived: ", response.data);
+      return response.data.recipe;
+    } else {
+      console.error("Error getting recipe.");
+      return false;
+    }
+  } catch (error) {
+    console.error("Error.");
+    return false;
+  }
+}

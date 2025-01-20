@@ -31,8 +31,10 @@ import {
 import { Toggle } from "@/components/ui/toggle";
 import { useState } from "react";
 import dayjs from "dayjs";
+import { useNavigate } from "react-router-dom";
 
 export function RecipeCard({ title, description, photo, id, uploaded_at }) {
+  const navigate = useNavigate();
   const [isFavorite, setisFavorite] = useState<boolean>(false);
   const handleAddFavorites = () => {
     // TODO: crear agregar a favoritos
@@ -53,9 +55,24 @@ export function RecipeCard({ title, description, photo, id, uploaded_at }) {
           {dayjs(uploaded_at).format("DD/MM/YYYY")}
         </CardDescription>
       </CardHeader>
-      <CardContent>{description}</CardContent>
+      <CardContent>
+        <p
+          style={{
+            overflow: "hidden",
+            whiteSpace: "nowrap",
+            textOverflow: "ellipsis",
+            maxWidth: "100%",
+          }}
+        >
+          {description}
+        </p>
+      </CardContent>
       <CardFooter className="flex justify-between">
-        <Button>
+        <Button
+          onClick={() => {
+            navigate(`/recipe/${id}`);
+          }}
+        >
           Ver <ArrowRight />
         </Button>
         <div className="flex gap-3">
