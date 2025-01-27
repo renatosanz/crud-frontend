@@ -7,7 +7,7 @@ import Home from "./views/home-view/Home";
 import UploadRecipes from "./views/files-view/UploadRecipes.tsx";
 import Search from "./views/search-view/Search.tsx";
 import RecipePage from "./views/recipe-view/RecipePage.tsx";
-import { ThemeProvider } from "@/components/ThemeProvider";
+import {ThemeProvider} from "@/components/ThemeProvider.tsx";
 
 const router = createBrowserRouter(
   [
@@ -32,5 +32,7 @@ const router = createBrowserRouter(
 );
 
 createRoot(document.getElementById("root")).render(
-  <RouterProvider router={router} />
+  <ThemeProvider>
+    <RouterProvider router={router} />
+  </ThemeProvider>
 );

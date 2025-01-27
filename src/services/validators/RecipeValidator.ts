@@ -19,6 +19,6 @@ export const RecipeValidator = z.object({
       })
     )
     .refine((value) => value.some((item) => item), {
-      message: "You have to select at least one item.",
+      message: "Agrega un ingrediente como mínimo.",
     }),
 });

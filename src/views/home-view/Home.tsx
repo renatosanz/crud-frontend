@@ -83,7 +83,7 @@ export default function Home() {
               </Button>
             </LogoutModal>
           </nav>
-          <header className="justify-between flex flex-row gap-5 bg-zinc-100 rounded-2xl px-5 py-3">
+          <header className="justify-between flex flex-row  dark:bg-gray-800 gap-5  rounded-2xl px-5 py-3">
             <div>
               {/* basic user info */}
               <h1>{isLogged ? user.username : "no_user"}</h1>
