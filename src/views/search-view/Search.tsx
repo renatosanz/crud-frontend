@@ -52,7 +52,10 @@ export default function Search() {
             </TableHeader>
             <TableBody>
               {results.map((recipe) => (
-                <TableRow key={recipe.id}>
+                <TableRow
+                  key={recipe.id}
+                  onClick={() => navigate(`/recipe/${recipe.id}`)}
+                >
                   <TableCell className="font-medium">{recipe.title}</TableCell>
                   <TableCell>
                     {recipe.num_ingredients + " ingrediente(s)"}

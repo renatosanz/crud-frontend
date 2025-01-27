@@ -21,7 +21,7 @@ import { RecipeSchema, uploadRecipe } from "@/services/recipe-service";
 import { RecipeValidator } from "@/services/validators/RecipeValidator";
 import { Input } from "@/components/ui/input";
 import dayjs from "dayjs";
-import { Cross, FileQuestion, FileUp } from "lucide-react";
+import { Cross, Crosshair, FileQuestion, FileUp, Minus, MinusCircle, X, XSquare } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -291,7 +291,7 @@ export default function UploadRecipes() {
                         type="button"
                         onClick={() => removeIngredient(ingredient.id)}
                       >
-                        <Cross />
+                        <XSquare />
                       </Button>
                     </div>
                   ))}
