@@ -24,7 +24,7 @@ export default function RecipePage() {
   }, []);
   return (
     <main className="h-screen flex w-screen flex-col">
-      <div className="mx-auto w-6/12 py-20 flex flex-col p-5 rounded-2xl">
+      <div className="mx-auto w-11/12 lg:w-6/12 lg:py-20 flex flex-col p-5 rounded-2xl">
         {recipe ? (
           <>
             <header className="flex flex-row gap-5">
@@ -39,11 +39,12 @@ export default function RecipePage() {
             </p>
             <section>
               {/*Lista de ingredientes */}
-              <div className="grid mt-5 grid-cols-2 gap-5">
+              <div className="grid mt-5 md:grid-cols-2 gap-5">
                 <div>
                   <img
+                    className="w-full sm:w-auto"
                     src={environment.url_api + "/images/" + recipe.img_name}
-                    alt=""
+                    alt={recipe.img_name}
                   />
                 </div>
                 <div>

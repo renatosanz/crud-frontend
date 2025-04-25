@@ -21,7 +21,16 @@ import { RecipeSchema, uploadRecipe } from "@/services/recipe-service";
 import { RecipeValidator } from "@/services/validators/RecipeValidator";
 import { Input } from "@/components/ui/input";
 import dayjs from "dayjs";
-import { Cross, Crosshair, FileQuestion, FileUp, Minus, MinusCircle, X, XSquare } from "lucide-react";
+import {
+  Cross,
+  Crosshair,
+  FileQuestion,
+  FileUp,
+  Minus,
+  MinusCircle,
+  X,
+  XSquare,
+} from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -42,13 +51,13 @@ export default function UploadRecipes() {
     { id: string; value: string }[]
   >([]);
   const [buttonsDisabled, setButtonsDisabled] = useState<boolean>(false);
-  // Navegación para redirigir a la página de inicio de sesión
+  
   const navigate = useNavigate();
-  // Control de sesión del usuario
+  
   const [isLogged, setIsLogged] = useState(false);
   let user = useUserStore((state) => state.user);
   const set_user = useUserStore((state) => state.set_user);
-  // Guardar el inicio de sesión actual para usarlo al cerrar sesión
+  
   const set_last_login = useUserStore((state) => state.set_last_login);
   const last_login = useUserStore((state) => state.last_login);
 
@@ -151,13 +160,13 @@ export default function UploadRecipes() {
   return (
     <>
       <main className="h-screen flex w-screen">
-        <div className="m-auto w-7/12 h-5/6 flex flex-col p-5 rounded-2xl">
+        <div className="mx-auto flex flex-col p-5 rounded-2xl lg:w-7/12 lg:py-20 gap-5 md:8/12 w-11/12 sm:p-10">
           <h1 className="mb-5">Subir Receta</h1>
           <TooltipProvider>
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-4 flex flex-row gap-10"
+                className="space-y-4 flex flex-col md:flex-row gap-10"
               >
                 <div className="space-y-2 w-full">
                   <FormField
@@ -251,6 +260,45 @@ export default function UploadRecipes() {
                     )}
                   />
 
+                  <div className="md:hidden py-10 inline w-full">
+                    <h2>Ingredientes</h2>
+                    {ingredients.map((ingredient, index) => (
+                      <div
+                        key={ingredient.id}
+                        className="flex items-center space-x-4 mb-2"
+                      >
+                        <Controller
+                          name={`ingredients.${index}.value` as const}
+                          control={form.control}
+                          defaultValue={ingredient.value}
+                          render={({ field }) => (
+                            <Input
+                              {...field}
+                              placeholder="Ingrediente"
+                              value={field.value}
+                              autoComplete="off"
+                              disabled={buttonsDisabled}
+                              onChange={(e) => {
+                                field.onChange(e.target.value);
+                                updateIngredient(ingredient.id, e.target.value);
+                              }}
+                            />
+                          )}
+                        />
+                        <Button
+                          variant="ghost"
+                          type="button"
+                          onClick={() => removeIngredient(ingredient.id)}
+                        >
+                          <XSquare />
+                        </Button>
+                      </div>
+                    ))}
+                    <Button type="button" onClick={addIngredient}>
+                      Agregar Ingrediente
+                    </Button>
+                  </div>
+
                   <div id="preview-container"></div>
                   <p>
                     Fecha de subida:
@@ -261,7 +309,7 @@ export default function UploadRecipes() {
                     Enviar
                   </Button>
                 </div>
-                <div className="w-full">
+                <div className="hidden md:inline w-full">
                   <h2>Ingredientes</h2>
                   {ingredients.map((ingredient, index) => (
                     <div

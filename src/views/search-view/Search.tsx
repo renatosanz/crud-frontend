@@ -14,6 +14,8 @@ import {
 } from "@/components/ui/table";
 import dayjs from "dayjs";
 import es from "dayjs/locale/es";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
 
 dayjs.locale(es);
 
@@ -34,12 +36,17 @@ export default function Search() {
   }, []);
   return (
     <main className="h-screen flex w-screen flex-col">
-      <div className="mx-auto w-6/12 py-20 gap-5 flex flex-col p-5 rounded-2xl">
-        {str === undefined ? (
-          <h2>Todas las recetas</h2>
-        ) : (
-          <h2>Resultados de busqueda: {str}</h2>
-        )}
+      <div className="mx-auto flex flex-col p-5 rounded-2xl lg:w-7/12 lg:py-20 gap-5 md:8/12 w-11/12 sm:p-10">
+        <header className="flex flex-row gap-5">
+          <Button onClick={() => navigate(-1)}>
+            <ArrowLeft />
+          </Button>
+          {str === undefined ? (
+            <h2>Todas las recetas</h2>
+          ) : (
+            <h2>Resultados de busqueda: {str}</h2>
+          )}
+        </header>
         <section>
           <Table>
             <TableHeader>
@@ -53,6 +60,7 @@ export default function Search() {
             <TableBody>
               {results.map((recipe) => (
                 <TableRow
+                  className="cursor-pointer"
                   key={recipe.id}
                   onClick={() => navigate(`/recipe/${recipe.id}`)}
                 >

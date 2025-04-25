@@ -85,8 +85,8 @@ export default function Login() {
 
   return (
     <>
-      <main className="h-screen flex w-screen  ">
-        <Card className="80vw w-1/4 flex m-auto p-5 flex-col">
+      <main className="h-screen flex w-screen">
+        <Card className="md:w-2/4 lg:w-1/3 flex m-auto p-5 flex-col">
           <CardHeader>
             <CardTitle className="text-3xl font-bold">Login</CardTitle>
             <CardDescription>Bienvenido</CardDescription>

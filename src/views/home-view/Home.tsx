@@ -14,6 +14,7 @@ import { getRecipes } from "@/services/recipe-service";
 import { RecipeCard } from "./RecipeCard";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import SearchBar from "./SearchBar";
 
 export default function Home() {
   // navigate para redirigir a la pagina de login
@@ -21,7 +22,6 @@ export default function Home() {
 
   // loggin/user control
   const [isLogged, setIsLogged] = useState(false);
-  const [searchStr, setSearchStr] = useState("");
   let user = useUserStore((state) => state.user);
   const set_user = useUserStore((state) => state.set_user);
   const set_recipes = useUserStore((state) => state.set_recipes);
@@ -56,26 +56,14 @@ export default function Home() {
     }
   };
 
-  const handleSearch = async () => {
-    //TODO: crear las busquedas
-    navigate(`/search/${searchStr}`);
-  };
-
   return (
     <>
       <main className="h-screen flex w-screen flex-col">
-        <div className="mx-auto w-6/12 py-20 gap-5 flex flex-col p-5 rounded-2xl">
+        <div className="mx-auto flex flex-col p-5 rounded-2xl lg:w-7/12 lg:py-20 gap-5 md:8/12 w-11/12 sm:p-10">
           <nav className="flex flex-row gap-3 justify-between">
             <HomeMenu />
-            <div className="flex flex-row w-full gap-3">
-              <Input
-                placeholder="Buscar"
-                id="search_input"
-                onChange={(e) => setSearchStr(e.target.value)}
-              />
-              <Button variant="outline" onClick={handleSearch}>
-                <Search className="m-auto w-full" />
-              </Button>
+            <div className="hidden sm:inline">
+              <SearchBar />
             </div>
             <LogoutModal handleLogout={handleLogout}>
               <Button variant="destructive">
@@ -83,7 +71,10 @@ export default function Home() {
               </Button>
             </LogoutModal>
           </nav>
-          <header className="justify-between flex flex-row  dark:bg-gray-800 gap-5 bg-zinc-100 rounded-2xl px-5 py-3">
+          <div className="inline sm:hidden ">
+            <SearchBar />
+          </div>
+          <header className="justify-between flex flex-col sm:flex-row  dark:bg-gray-800 gap-5 bg-zinc-100 rounded-2xl px-5 py-3">
             <div>
               {/* basic user info */}
               <h1>{isLogged ? user.username : "no_user"}</h1>
@@ -109,7 +100,7 @@ export default function Home() {
           </header>
           <section>
             <h2 className="px-5 py-3">Tus Recetas</h2>
-            <div className="grid grid-cols-2 gap-5 ">
+            <div className="grid grid-cols-1 md:grid-cols-2  gap-5 ">
               {recipes.length > 0 ? (
                 recipes.map((e: any) => (
                   <RecipeCard
