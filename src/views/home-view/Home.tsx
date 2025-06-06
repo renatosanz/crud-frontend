@@ -15,6 +15,7 @@ import { RecipeCard } from "./RecipeCard";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import SearchBar from "./SearchBar";
+import RandomMealBanner from "./RandomMealBanner";
 
 export default function Home() {
   // navigate para redirigir a la pagina de login
@@ -77,30 +78,25 @@ export default function Home() {
           <header className="justify-between flex flex-col sm:flex-row  dark:bg-gray-800 gap-5 bg-zinc-100 rounded-2xl px-5 py-3">
             <div>
               {/* basic user info */}
-              <h1>{isLogged ? user.username : "no_user"}</h1>
-              {isLogged ? (
-                <>
-                  {user.last_login != null ? (
-                    <h4>
-                      Ultima sesión:{" "}
-                      {dayjs(user.last_login).format("DD/MM/YYYY hh:mm:ss")}
-                    </h4>
-                  ) : (
-                    <h3>Bienvenido</h3>
-                  )}
-                </>
+              <h1>{user?.username}</h1>
+              {user?.last_login != null ? (
+                <h4>
+                  Last session:{" "}
+                  {dayjs(user?.last_login).format("DD/MM/YYYY hh:mm")}
+                </h4>
               ) : (
-                <h2>Usuario no Logeado</h2>
+                <h3>Bienvenido</h3>
               )}
             </div>
-            <div>
-              <h3>Recetas publicadas</h3>
-              <h1>{isLogged ? user.recipes_count : -1}</h1>
+            <div className="flex flex-col">
+              <p className="text-sm m-auto">Recipes Posted</p>
+              <h1 className="m-auto">{user?.recipes_count}</h1>
             </div>
           </header>
-          <section>
-            <h2 className="px-5 py-3">Tus Recetas</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2  gap-5 ">
+          <RandomMealBanner />
+          <section className="dark:bg-gray-800 gap-5 bg-zinc-100  pb-3 rounded-xl">
+            <h2 className="px-5 py-3">Your Posts</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 px-5 pb-3  gap-5 ">
               {recipes.length > 0 ? (
                 recipes.map((e: any) => (
                   <RecipeCard
@@ -113,7 +109,7 @@ export default function Home() {
                   />
                 ))
               ) : (
-                <h4>Tus recetas publicadas apareceran aqui</h4>
+                <h4 className="px-5">Your posted recipes will show here.</h4>
               )}
             </div>
           </section>
