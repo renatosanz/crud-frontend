@@ -83,9 +83,8 @@ export async function searchRecipes(searchText: string) {
 
 export async function getSingleRecipe(id: string) {
   try {
-    const response = await axios.post(
-      `${environment.url_api}/recipe/getRecipe`,
-      { recipe_id: id },
+    const response = await axios.get(
+      `${environment.url_api}/recipe/getRecipe?id=${id}`,
       {
         withCredentials: true,
       }
