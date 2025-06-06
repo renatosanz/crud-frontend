@@ -72,18 +72,23 @@
 /*Estilos de https://ui.shadcn.com/docs/components/typography*/
 h1 {
   @apply scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl;
+  letter-spacing: -0.1rem;
 }
 h2 {
   @apply scroll-m-20 pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0;
+  letter-spacing: -0.10rem;
 }
 h3 {
   @apply scroll-m-20 text-2xl font-semibold tracking-tight;
+  letter-spacing: -0.05rem;
 }
 h4 {
   @apply scroll-m-20 font-semibold tracking-tight;
+  letter-spacing: -0.04rem;
 }
 p {
-  @apply leading-7 ;
+  @apply leading-7;
+  letter-spacing: -1px;
 }
 a {
   @apply font-medium text-primary underline underline-offset-4;
