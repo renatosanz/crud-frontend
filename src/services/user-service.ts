@@ -95,6 +95,44 @@ export async function setUserData(new_data: any) {
   }
 }
 
+export interface RandomMeal {
+  title: string;
+  img: string;
+  ingredients?: Array<string>;
+  description?: string;
+  youtube_link?: string | null;
+  origin?: string;
+  category?: string;
+}
+
+// Request for a daily random meal from themealdb.com
+// complete param is for retrive the complete recipe or just banner info
+export async function getRandomDayMeal({
+  completeData,
+}: {
+  completeData: boolean;
+}): Promise<RandomMeal> {
+  try {
+    const response = await axios.get(
+      `${environment.url_api}/user/random_day_meal?complete=${completeData}`,
+      {
+        withCredentials: true,
+      }
+    );
+
+    if (response.data.ok) {
+      console.log("Random Meal received.", response.data.random_meal);
+      return response.data.random_meal;
+    } else {
+      console.error("Error on get protected data.");
+      return undefined;
+    }
+  } catch (error) {
+    console.error("Error.");
+    return undefined;
+  }
+}
+
 export async function logoutUser(last_login_date: Date) {
   try {
     const response = await axios.post(
