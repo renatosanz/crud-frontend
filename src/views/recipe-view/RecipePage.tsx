@@ -14,6 +14,7 @@ export default function RecipePage() {
 
   useEffect(() => {
     const getRecipe = async () => {
+      console.log(id)
       setRecipe(await getSingleRecipe(id));
     };
     if (Cookies.get("isLogged")) {
@@ -25,53 +26,50 @@ export default function RecipePage() {
   return (
     <main className="h-screen flex w-screen flex-col">
       <div className="mx-auto w-11/12 lg:w-6/12 lg:py-20 flex flex-col p-5 rounded-2xl">
-        {recipe ? (
-          <>
-            <header className="flex flex-row gap-5">
-              <Button onClick={() => navigate(-1)}>
-                <ArrowLeft />
-              </Button>
-              <h2>{recipe.title}</h2>
-            </header>
-            <p>
-              Publicado por <b>{recipe.User.username}</b>
-              {` el ${dayjs(recipe.uploaded_at).format("MMMM D, YYYY")}`}
-            </p>
-            <section>
-              {/*Lista de ingredientes */}
-              <div className="grid mt-5 md:grid-cols-2 gap-5">
-                <div>
-                  <img
-                    className="w-full sm:w-auto"
-                    src={environment.url_api + "/images/" + recipe.img_name}
-                    alt={recipe.img_name}
-                  />
-                </div>
-                <div>
-                  <h3>Ingredientes</h3>
-                  <ul className="ml-7">
-                    {recipe.ingredients.map((e) => (
-                      <li key={e.id} style={{ listStyleType: "square" }}>
-                        {e.value}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+        <>
+          <header className="flex flex-row gap-5">
+            <Button onClick={() => navigate(-1)}>
+              <ArrowLeft />
+            </Button>
+            <h2>{recipe?.title}</h2>
+          </header>
+          <p>
+            Publicado por <b>{recipe?.User.username}</b>
+            {` el ${dayjs(recipe?.uploaded_at).format("MMMM D, YYYY")}`}
+          </p>
+          <section>
+            {/*Lista de ingredientes */}
+            <div className="grid mt-5 md:grid-cols-2 gap-5">
+              <div>
+                <img
+                  className="w-full sm:w-auto"
+                  src={
+                    recipe
+                      ? environment.url_api + "/images/" + recipe?.img_name
+                      : ""
+                  }
+                  alt={recipe?.img_name}
+                />
               </div>
-              <div className="mt-5">
-                <h3>Descripción</h3>
-                <p style={{ textWrap: "wrap", wordBreak: "break-all" }}>
-                  {recipe.description}
-                </p>
+              <div>
+                <h3>Ingredientes</h3>
+                <ul className="ml-7">
+                  {recipe?.ingredients.map((e) => (
+                    <li key={e.id} style={{ listStyleType: "square" }}>
+                      {e.value}
+                    </li>
+                  ))}
+                </ul>
               </div>
-            </section>
-          </>
-        ) : (
-          <>
-            <p>Receta no disponible</p>
-            <p>Descripción no disponible</p>
-          </>
-        )}
+            </div>
+            <div className="mt-5">
+              <h3>Descripción</h3>
+              <p style={{ textWrap: "wrap", wordBreak: "break-all" }}>
+                {recipe?.description}
+              </p>
+            </div>
+          </section>
+        </>
       </div>
     </main>
   );
