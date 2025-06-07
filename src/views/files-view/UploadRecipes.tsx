@@ -51,13 +51,13 @@ export default function UploadRecipes() {
     { id: string; value: string }[]
   >([]);
   const [buttonsDisabled, setButtonsDisabled] = useState<boolean>(false);
-  
+
   const navigate = useNavigate();
-  
+
   const [isLogged, setIsLogged] = useState(false);
   let user = useUserStore((state) => state.user);
   const set_user = useUserStore((state) => state.set_user);
-  
+
   const set_last_login = useUserStore((state) => state.set_last_login);
   const last_login = useUserStore((state) => state.last_login);
 
@@ -83,7 +83,10 @@ export default function UploadRecipes() {
     defaultValues: RecipeSchema(),
   });
   const addIngredient = () => {
-    setIngredients([...ingredients, { id: crypto.randomUUID(), value: "" }]);
+    setIngredients([
+      ...ingredients,
+      { id: ingredients.length + 1 + "", value: "" },
+    ]);
   };
 
   // Eliminar un ingrediente
@@ -161,7 +164,7 @@ export default function UploadRecipes() {
     <>
       <main className="h-screen flex w-screen">
         <div className="mx-auto flex flex-col p-5 rounded-2xl lg:w-7/12 lg:py-20 gap-5 md:8/12 w-11/12 sm:p-10">
-          <h1 className="mb-5">Subir Receta</h1>
+          <h1 className="mb-5">Upload a recipe</h1>
           <TooltipProvider>
             <Form {...form}>
               <form
