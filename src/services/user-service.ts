@@ -103,6 +103,8 @@ export interface RandomMeal {
   youtube_link?: string | null;
   origin?: string;
   category?: string;
+  author?: string;
+  source?: string;
 }
 
 // Request for a daily random meal from themealdb.com

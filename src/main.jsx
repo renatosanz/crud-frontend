@@ -7,6 +7,7 @@ import Home from "./views/home-view/Home";
 import UploadRecipes from "./views/files-view/UploadRecipes.tsx";
 import Search from "./views/search-view/Search.tsx";
 import RecipePage from "./views/recipe-view/RecipePage.tsx";
+import DailyRecipe from "./views/recipe-view/DailyRecipe.tsx";
 import { ThemeProvider } from "@/components/ThemeProvider.tsx";
 
 const router = createBrowserRouter(
@@ -18,6 +19,7 @@ const router = createBrowserRouter(
     { path: "/search/:str", element: <Search /> },
     { path: "/recipe/:id", element: <RecipePage /> },
     { path: "/search", element: <Search /> },
+    { path: "/daily", element: <DailyRecipe /> },
   ],
   {
     future: {
