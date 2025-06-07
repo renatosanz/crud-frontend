@@ -14,7 +14,7 @@ export default function RecipePage() {
 
   useEffect(() => {
     const getRecipe = async () => {
-      console.log(id)
+      console.log(id);
       setRecipe(await getSingleRecipe(id));
     };
     if (Cookies.get("isLogged")) {
@@ -34,8 +34,8 @@ export default function RecipePage() {
             <h2>{recipe?.title}</h2>
           </header>
           <p>
-            Publicado por <b>{recipe?.User.username}</b>
-            {` el ${dayjs(recipe?.uploaded_at).format("MMMM D, YYYY")}`}
+            Posted by <b>{recipe?.User.username}</b>
+            {` at ${dayjs(recipe?.uploaded_at).format("MMMM D, YYYY")}`}
           </p>
           <section>
             {/*Lista de ingredientes */}
@@ -52,7 +52,7 @@ export default function RecipePage() {
                 />
               </div>
               <div>
-                <h3>Ingredientes</h3>
+                <h3>Ingredients</h3>
                 <ul className="ml-7">
                   {recipe?.ingredients.map((e) => (
                     <li key={e.id} style={{ listStyleType: "square" }}>
@@ -63,7 +63,7 @@ export default function RecipePage() {
               </div>
             </div>
             <div className="mt-5">
-              <h3>Descripción</h3>
+              <h3>Instruction</h3>
               <p style={{ textWrap: "wrap", wordBreak: "break-all" }}>
                 {recipe?.description}
               </p>
