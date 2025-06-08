@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { environment } from "@/env";
-import { getSingleRecipe } from "@/services/recipe-service";
+import { getRecipe } from "@/services/recipe-service";
 import dayjs from "dayjs";
 import Cookies from "js-cookie";
 import { ArrowLeft } from "lucide-react";
@@ -13,12 +13,10 @@ export default function RecipePage() {
   const [recipe, setRecipe] = useState(null);
 
   useEffect(() => {
-    const getRecipe = async () => {
-      console.log(id);
-      setRecipe(await getSingleRecipe(id));
-    };
     if (Cookies.get("isLogged")) {
-      getRecipe().catch(console.error);
+      getRecipe(id)
+        .then((recipe) => setRecipe(recipe))
+        .catch(console.error);
     } else {
       navigate("/", { replace: true });
     }
@@ -54,7 +52,7 @@ export default function RecipePage() {
               <div>
                 <h3>Ingredients</h3>
                 <ul className="ml-7">
-                  {recipe?.ingredients.map((e) => (
+                  {recipe?.ingredients?.map((e) => (
                     <li key={e.id} style={{ listStyleType: "square" }}>
                       {e.value}
                     </li>
