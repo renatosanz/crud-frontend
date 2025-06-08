@@ -11,22 +11,20 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { deepCopy } from "@/lib/utils";
-import { setUserData } from "@/services/user-service";
+import { updateUserData } from "@/services/user-service";
 import { useUserStore } from "@/services/UserStore";
+import { DialogClose } from "@radix-ui/react-dialog";
 import { useState } from "react";
-import InputMask from "react-input-mask";
 
 export function EditUser({ children }) {
-  const [user, set_user] = useState(
+  const [user_temporal, set_user_temporal] = useState(
     deepCopy(useUserStore((state) => state.user))
   );
 
-  const handleUserChanges = async () => {
-    const new_user = await setUserData(user);
-    if (new_user) {
-      set_user(new_user);
-      window.location.reload();
-    }
+  const set_user = useUserStore((state) => state.set_user);
+
+  const handleUserChanges = (event) => {
+    updateUserData(user_temporal).then((user) => set_user(user));
   };
 
   return (
@@ -34,10 +32,9 @@ export function EditUser({ children }) {
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]" onCloseAutoFocus={() => {}}>
         <DialogHeader>
-          <DialogTitle>Editar Perfil</DialogTitle>
+          <DialogTitle>Edit Profile</DialogTitle>
           <DialogDescription>
-            Haz cambios en tu perfil aquí. Haz clic en Guardar cuando hayas
-            terminado.
+            Make changes to your profile here. Click Save when you're finished.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
@@ -47,10 +44,17 @@ export function EditUser({ children }) {
             </Label>
             <Input
               id="username"
-              defaultValue={user.username}
+              defaultValue={user_temporal?.username}
               className="col-span-3"
               autoComplete="off"
-              onChange={(e) => set_user({ ...user, username: e.target.value })}
+              maxLength={20}
+              minLength={2}
+              onChange={(e) =>
+                set_user_temporal({
+                  ...user_temporal,
+                  username: e.target.value,
+                })
+              }
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
@@ -59,7 +63,7 @@ export function EditUser({ children }) {
             </Label>
             <Input
               id="email"
-              defaultValue={user.email}
+              defaultValue={user_temporal?.email}
               disabled
               className="col-span-3"
             />
@@ -70,14 +74,27 @@ export function EditUser({ children }) {
             </Label>
             <Input
               id="country"
-              defaultValue={user.country}
+              defaultValue={user_temporal?.country}
               disabled
+              className="col-span-3"
+            />
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="age" className="text-right">
+              Age
+            </Label>
+            <Input
+              id="age"
+              type="number"
+              defaultValue={user_temporal?.age}
               className="col-span-3"
             />
           </div>
         </div>
         <DialogFooter>
-          <Button onClick={handleUserChanges}>Guardar Cambios</Button>
+          <DialogClose>
+            <Button onClick={handleUserChanges}>Save</Button>
+          </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>
