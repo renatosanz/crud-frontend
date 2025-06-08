@@ -58,7 +58,7 @@ export default function Search() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {results.map((recipe) => (
+              {results?.map((recipe) => (
                 <TableRow
                   className="cursor-pointer"
                   key={recipe.id}
