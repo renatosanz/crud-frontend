@@ -38,7 +38,7 @@ export default function Home() {
       if (user) {
         set_user(user);
         let res = await getRecipes();
-        console.log("first", res);
+         
         set_recipes(res.recipes);
         setIsLogged(true);
       }

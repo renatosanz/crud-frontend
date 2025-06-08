@@ -19,7 +19,7 @@ export async function registerUser(data: any) {
       data
     );
     if (response.data.ok) {
-      console.log("Register successful", response.data);
+       
       return response.data;
     } else {
       console.error("Error on register.");
@@ -60,7 +60,7 @@ export async function getUserData() {
     });
 
     if (response.data.ok) {
-      console.log("Protected Data OK.");
+       
       return response.data.user_data;
     } else {
       console.error("Error on get protected data.");
@@ -83,7 +83,7 @@ export async function updateUserData(new_data: any) {
     );
 
     if (response.data.ok) {
-      console.log("Data changed OK.");
+       
       return response.data.user_data;
     } else {
       console.error("Error on change data.");
@@ -123,7 +123,7 @@ export async function getRandomDayMeal({
     );
 
     if (response.data.ok) {
-      console.log("Random Meal received.", response.data.random_meal);
+       
       return response.data.random_meal;
     } else {
       console.error("Error on get protected data.");
@@ -147,7 +147,7 @@ export async function logoutUser(last_login_date: Date) {
 
     if (response.data.ok) {
       Cookies.remove("isLogged");
-      console.log("User Logout!!!.");
+       
       return true;
     } else {
       console.error("Error on Logout.");

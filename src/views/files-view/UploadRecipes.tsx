@@ -108,7 +108,7 @@ export default function UploadRecipes() {
       shouldValidate: true,
       shouldDirty: true,
     });
-    console.log("ingredients", ingredients);
+     
   };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {

@@ -13,7 +13,7 @@ export function RecipeSchema() {
 
 export async function uploadRecipe(data: any) {
   try {
-    console.log("data", data);
+     
     const response = await axios.post(
       `${environment.url_api}/recipe/upload`,
       data,
@@ -24,7 +24,7 @@ export async function uploadRecipe(data: any) {
       }
     );
     if (response.data.ok) {
-      console.log("Recipe published", response.data);
+       
       return response.data;
     } else {
       console.error("Error on publish recipe.");
@@ -46,7 +46,7 @@ export async function getRecipes() {
     );
 
     if (response.data.ok) {
-      console.log("Recipes recived: ", response.data);
+       
       return response.data;
     } else {
       console.error("Error getting recipes.");
@@ -69,7 +69,7 @@ export async function searchRecipes(searchText: string) {
     );
 
     if (response.data.ok) {
-      console.log("Recipes recived: ", response.data);
+       
       return response.data.recipes;
     } else {
       console.error("Error getting recipes.");
@@ -91,7 +91,7 @@ export async function getRecipe(id: string) {
     );
 
     if (response.data.ok) {
-      console.log("Recipe recived: ", response.data);
+       
       return response.data.recipe;
     } else {
       console.error("Error getting recipe.");
@@ -116,7 +116,7 @@ export async function deleteRecipe(id: string) {
     );
 
     if (response.data.ok) {
-      console.log("Recipe recived: ", response.data);
+       
       return response.data.recipe;
     } else {
       console.error("Error getting recipe.");
