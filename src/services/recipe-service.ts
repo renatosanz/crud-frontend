@@ -81,12 +81,37 @@ export async function searchRecipes(searchText: string) {
   }
 }
 
-export async function getSingleRecipe(id: string) {
+export async function getRecipe(id: string) {
   try {
     const response = await axios.get(
       `${environment.url_api}/recipe/getRecipe?id=${id}`,
       {
         withCredentials: true,
+      }
+    );
+
+    if (response.data.ok) {
+      console.log("Recipe recived: ", response.data);
+      return response.data.recipe;
+    } else {
+      console.error("Error getting recipe.");
+      return false;
+    }
+  } catch (error) {
+    console.error("Error.");
+    return false;
+  }
+}
+
+export async function deleteRecipe(id: string) {
+  try {
+    const response = await axios.delete(
+      `${environment.url_api}/recipe/deleteRecipe`,
+      {
+        withCredentials: true,
+        data: {
+          recipe_id: id,
+        },
       }
     );
 
