@@ -110,7 +110,9 @@ function DeletePostModal({ children, handleDelete }) {
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Delete Recipe?</AlertDialogTitle>
+          <AlertDialogTitle style={{ letterSpacing: "-0.05rem" }}>
+            Delete Recipe?
+          </AlertDialogTitle>
           <AlertDialogDescription>
             Deleting this recipe is irreversible. Are you sure you want to
             delete it?

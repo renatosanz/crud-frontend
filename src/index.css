@@ -76,7 +76,7 @@ h1 {
 }
 h2 {
   @apply scroll-m-20 pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0;
-  letter-spacing: -0.10rem;
+  letter-spacing: -0.1rem;
 }
 h3 {
   @apply scroll-m-20 text-2xl font-semibold tracking-tight;
@@ -88,7 +88,7 @@ h4 {
 }
 p {
   @apply leading-7;
-  letter-spacing: -1px;
+  letter-spacing: -0.8px;
 }
 a {
   @apply font-medium text-primary underline underline-offset-4;
