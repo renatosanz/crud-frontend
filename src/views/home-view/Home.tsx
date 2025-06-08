@@ -57,6 +57,10 @@ export default function Home() {
     }
   };
 
+  const removePostDeleted = (id: string) => {
+    set_recipes(recipes.filter((post) => post.id !== id));
+  };
+
   return (
     <>
       <main className="h-screen flex w-screen flex-col">
@@ -98,8 +102,9 @@ export default function Home() {
             <h2 className="px-5 py-3">Your Posts</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 px-5 pb-3  gap-5 ">
               {recipes.length > 0 ? (
-                recipes.map((e: any) => (
+                recipes?.map((e: any) => (
                   <RecipeCard
+                    deleteCallback={removePostDeleted}
                     title={e.title}
                     photo={"none"}
                     id={e.id}
