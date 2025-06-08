@@ -72,7 +72,7 @@ export async function getUserData() {
   }
 }
 
-export async function setUserData(new_data: any) {
+export async function updateUserData(new_data: any) {
   try {
     const response = await axios.patch(
       `${environment.url_api}/user/changedata`,
