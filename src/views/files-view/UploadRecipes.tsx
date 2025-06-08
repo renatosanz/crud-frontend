@@ -100,7 +100,7 @@ export default function UploadRecipes() {
 
   // Actualizar un ingrediente
   const updateIngredient = (id: string, value: string) => {
-    const updatedIngredients = ingredients.map((ingredient) =>
+    const updatedIngredients = ingredients?.map((ingredient) =>
       ingredient.id === id ? { ...ingredient, value } : ingredient
     );
     setIngredients(updatedIngredients);
@@ -265,7 +265,7 @@ export default function UploadRecipes() {
 
                   <div className="md:hidden py-10 inline w-full">
                     <h2>Ingredientes</h2>
-                    {ingredients.map((ingredient, index) => (
+                    {ingredients?.map((ingredient, index) => (
                       <div
                         key={ingredient.id}
                         className="flex items-center space-x-4 mb-2"
@@ -314,7 +314,7 @@ export default function UploadRecipes() {
                 </div>
                 <div className="hidden md:inline w-full">
                   <h2>Ingredientes</h2>
-                  {ingredients.map((ingredient, index) => (
+                  {ingredients?.map((ingredient, index) => (
                     <div
                       key={ingredient.id}
                       className="flex items-center space-x-4 mb-2"
