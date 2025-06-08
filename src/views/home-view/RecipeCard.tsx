@@ -1,5 +1,3 @@
-import * as React from "react";
-
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,31 +7,32 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  ArrowBigRight,
-  ArrowRight,
-  Heart,
-  HeartIcon,
-  HeartOff,
-  Pen,
-  PenBox,
-  Trash,
-} from "lucide-react";
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { ArrowRight, Heart, HeartOff, PenBox, Trash } from "lucide-react";
 import { Toggle } from "@/components/ui/toggle";
 import { useState } from "react";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
+import { deleteRecipe } from "@/services/recipe-service";
 
-export function RecipeCard({ title, description, photo, id, uploaded_at }) {
+export function RecipeCard({
+  title,
+  description,
+  photo,
+  id,
+  uploaded_at,
+  deleteCallback,
+}) {
   const navigate = useNavigate();
   const [isFavorite, setisFavorite] = useState<boolean>(false);
   const handleAddFavorites = () => {
@@ -45,7 +44,10 @@ export function RecipeCard({ title, description, photo, id, uploaded_at }) {
     }
   };
   //TODO: crear borrar y editar recetas
-  const handleDelete = () => {};
+  const handleDelete = async () => {
+    deleteCallback(id);
+    await deleteRecipe(id);
+  };
   const handleEdit = () => {};
   return (
     <Card className="m-auto w-full">
@@ -79,14 +81,15 @@ export function RecipeCard({ title, description, photo, id, uploaded_at }) {
           <Toggle onClick={handleAddFavorites} aria-label="Agregar a favoritos">
             {isFavorite ? <Heart color="#ff4049" /> : <HeartOff />}
           </Toggle>
-          <Button
-            className="h-10 w-10"
-            variant="outline"
-            onClick={handleDelete}
-            aria-label="Borrar receta"
-          >
-            <Trash />
-          </Button>
+          <DeletePostModal handleDelete={handleDelete}>
+            <Button
+              className="h-10 w-10"
+              variant="destructive"
+              aria-label="Borrar receta"
+            >
+              <Trash />
+            </Button>
+          </DeletePostModal>
           <Button
             className="h-10 w-10"
             variant="outline"
@@ -98,5 +101,31 @@ export function RecipeCard({ title, description, photo, id, uploaded_at }) {
         </div>
       </CardFooter>
     </Card>
+  );
+}
+
+function DeletePostModal({ children, handleDelete }) {
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Delete Recipe?</AlertDialogTitle>
+          <AlertDialogDescription>
+            Deleting this recipe is irreversible. Are you sure you want to
+            delete it?
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction
+            className="bg-red-600 hover:bg-destructive"
+            onClick={handleDelete}
+          >
+            Delete
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
