@@ -51,7 +51,7 @@ export default function DailyRecipe() {
               <div>
                 <h3>Ingredients</h3>
                 <ul className="ml-7">
-                  {dailyRandomMeal?.ingredients.map((e) => (
+                  {dailyRandomMeal?.ingredients?.map((e) => (
                     <li key={e} style={{ listStyleType: "square" }}>
                       {e}
                     </li>
